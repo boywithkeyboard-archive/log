@@ -1,13 +1,4 @@
 {
-  "deno.enable": true,
-  "deno.lint": true,
-  "deno.unstable": false,
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.organizeImports": false
-  },
-  "editor.defaultFormatter": "denoland.vscode-deno",
-  "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "files.insertFinalNewline": true,
