@@ -1,5 +1,14 @@
 import core from '@actions/core'
 import github, { context } from '@actions/github'
+import { readFile, writeFile } from 'fs/promises'
+
+async function readChangelog() {
+  try {
+    return await readFile('changelog.md', { encoding: 'utf-8' })
+  } catch (err) {
+    return ''
+  }
+}
 
 async function action() {
   const { rest } = github.getOctokit(process.env.GITHUB_TOKEN as string)
@@ -62,6 +71,10 @@ async function action() {
     prerelease: tag.includes('canary') || tag.includes('nightly') || tag.includes('rc') || core.getBooleanInput('prerelease'),
     target_commitish: github.context.sha
   })
+
+  , content = await readChangelog()
+
+  await writeFile('changelog.md', `${changelogBody}${content === '' ? '\n' : `\n\n${content}`}`)
 
   core.setOutput('release_id', release.id)
   core.setOutput('tag_name', release.tag_name)
