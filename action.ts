@@ -1,5 +1,5 @@
 import core from '@actions/core'
-import github, { context } from '@actions/github'
+import { context, getOctokit } from '@actions/github'
 import { readFile, writeFile } from 'fs/promises'
 
 async function readChangelog() {
@@ -11,11 +11,11 @@ async function readChangelog() {
 }
 
 async function action() {
-  const { rest } = github.getOctokit(process.env.GITHUB_TOKEN as string)
+  const { rest } = getOctokit(process.env.GITHUB_TOKEN as string)
 
-  , tag = github.context.ref.replace('refs/tags/', '')
+  , tag = context.ref.replace('refs/tags/', '')
 
-  , { data: { created_at } } = await rest.repos.getLatestRelease({
+  , { data: latestRelease, status } = await rest.repos.getLatestRelease({
     ...context.repo
   })
 
@@ -47,7 +47,7 @@ async function action() {
     if (merged_at === null)
       continue
 
-    if (new Date(created_at).getTime() > new Date(merged_at).getTime())
+    if (status === 200 && new Date(latestRelease.created_at).getTime() > new Date(merged_at).getTime())
       continue
 
     const url = `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${number}`
@@ -62,14 +62,14 @@ async function action() {
   }
 
   const { data: release } = await rest.repos.createRelease({
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
+    owner: context.repo.owner,
+    repo: context.repo.repo,
     tag_name: tag,
     name: tag,
     body: releaseBody,
     draft: core.getBooleanInput('draft') ?? false,
     prerelease: tag.includes('canary') || tag.includes('nightly') || tag.includes('rc') || core.getBooleanInput('prerelease'),
-    target_commitish: github.context.sha
+    target_commitish: context.sha
   })
 
   , content = await readChangelog()
