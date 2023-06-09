@@ -1,0 +1,21 @@
+name: 'log'
+description: '🪵 A smart way of managing changes.'
+inputs:
+  prerelease:
+    description: 'Create the release as a prerelease.'
+    required: false
+    default: 'false'
+  draft:
+    description: 'Create the release as a draft.'
+    required: false
+    default: 'false'
+outputs:
+  release_id:
+    description: 'The id of the release.'
+  tag_name:
+    description: 'The tag name of the release.'
+  created_at:
+    description: 'The creation date of the release.'
+runs:
+  using: 'node16'
+  main: 'action.js'
