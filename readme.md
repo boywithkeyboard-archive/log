@@ -1,8 +1,10 @@
 ## log
 
-If you use log, you should have a `changelog.md` file (if you don`t, it will be generated). All your changes should be made through pull requests. log collects the titles of the last merged pull requests and creates a changelog and a release when you push a new tag to the origin.
+If you use log, you should have a `changelog.md` file (if you don't, it will be generated).
 
-`.github/workflows/update.yml`
+All your changes should be made through pull requests. log collects the titles of the last merged pull requests and creates a changelog and a release when you push a new tag to the origin.
+
+`.github/workflows/publish.yml`
 
 ```yml
 name: 'publish'
@@ -17,8 +19,8 @@ jobs:
     runs-on: 'ubuntu-latest'
 
     permissions:
-      pull-requests: 'read'
       contents: 'write'
+      pull-requests: 'read'
 
     steps:
       - uses: 'actions/checkout@v3'
