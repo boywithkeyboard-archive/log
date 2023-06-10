@@ -31,7 +31,7 @@ jobs:
 
 | Name | Description | Default |
 | --- | --- | --- |
-| `draft` | Create the release as a draft. | `false` |
+| `draft` | `false` |
 | `prerelease` | Create the release as a prerelease. | `false` |
 | `style` | Set the style of the changelog. This is a combination of the following options separated by a comma and space, e.g. `author, description`: `description`, `author` | |
 | `commit_message` | Set a custom commit message. If your message contains `{tag}`, it'll be automatically replaced with the tag name of the release. | `package: publish {tag}` |
@@ -39,10 +39,10 @@ jobs:
 
 ### Action Outputs
 
-| Name | Description | Example |
+| Name | Example |
 | --- | --- | --- |
-| `release_id` | Create the release as a draft. | `1` |
-| `tag_name` | Create the release as a draft. | `v1.0.0` |
-| `created_at` | Create the release as a draft. | `2023-06-10T16:29:08.625Z` |
-| `release_body` | Create the release as a draft. | |
-| `changelog_body` | Create the release as a draft. | |
+| `release_id` | `1` |
+| `tag_name` | `v1.0.0` |
+| `created_at` | `2023-06-10T16:29:08.625Z` |
+| `release_body` | |
+| `changelog_body` | |
