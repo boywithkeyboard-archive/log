@@ -40,3 +40,18 @@ jobs:
           git commit -am "package: publish ${{ env.TAG }}"
           git push origin HEAD:dev
 ```
+
+### Action Inputs
+
+| Name | Description | Default |
+| --- | --- | --- |
+| `draft` | Create the release as a draft. | `false` |
+| `prerelease` | Create the release as a prerelease. | `false` |
+| `style` | Set the style of the changelog. This is a combination of the following options separated by a space: `description`, `author` | `description` |
+| `token` | `GITHUB_TOKEN` (permissions `contents: write` and `pull-requests: read`) or a `repo` scoped [Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token). | `GITHUB_TOKEN` |
+
+### Action Outputs
+
+- `release_id`
+- `tag_name`
+- `created_at`
