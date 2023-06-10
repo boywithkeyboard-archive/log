@@ -40,7 +40,7 @@ jobs:
 ### Action Outputs
 
 | Name | Example |
-| --- | --- | --- |
+| --- | --- |
 | `release_id` | `1` |
 | `tag_name` | `v1.0.0` |
 | `created_at` | `2023-06-10T16:29:08.625Z` |
