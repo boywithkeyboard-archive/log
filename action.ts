@@ -111,9 +111,9 @@ async function action() {
   await rest.repos.createOrUpdateFileContents({
     ...context.repo,
     path: 'changelog.md',
-    content: `${changelogBody}${content === '' ? '\n' : `\n\n${content}`}`,
+    content: Buffer.from(`${changelogBody}${content === '' ? '\n' : `\n\n${content}`}`).toString('base64'),
     message: getInput('commit_message').replace('{tag}', tag),
-    sha
+    ...(sha !== null && { sha })
   })
 
   setOutput('release_id', release.id)
