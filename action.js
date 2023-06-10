@@ -7849,11 +7849,11 @@ async function action() {
   await rest.repos.createOrUpdateFileContents({
     ...import_github.context.repo,
     path: "changelog.md",
-    content: `${changelogBody}${content === "" ? "\n" : `
+    content: Buffer.from(`${changelogBody}${content === "" ? "\n" : `
 
-${content}`}`,
+${content}`}`).toString("base64"),
     message: (0, import_core.getInput)("commit_message").replace("{tag}", tag),
-    sha
+    ...sha !== null && { sha }
   });
   (0, import_core.setOutput)("release_id", release.id);
   (0, import_core.setOutput)("tag_name", tag);
