@@ -28,8 +28,6 @@ jobs:
 
       - name: 'Create Release'
         uses: 'azurystudio/log@v1'
-        env:
-          token: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: 'Commit Changelog'
         run: |
