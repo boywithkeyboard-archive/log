@@ -4,7 +4,7 @@ inputs:
   style:
     description: 'Set the style of the changelog.'
     required: false
-    default: 'author'
+    default: ''
   prerelease:
     description: 'Create the release as a prerelease.'
     required: false

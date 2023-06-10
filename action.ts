@@ -55,7 +55,7 @@ async function action() {
   let changelogBody = `## [${tag}](https://github.com/${context.repo.owner}/${context.repo.repo}/releases/tag/${tag})\n`
   , releaseBody = `### ${tag} / ${year}.${month < 10 ? `0${month}` : month}.${day < 10 ? `0${day}` : day}\n`
 
-  const style = getInput('style').split(',')
+  const style = getInput('style').split(', ')
 
   for (const { user, title, number, merged_at, body } of data) {
     if (merged_at === null)
