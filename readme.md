@@ -23,20 +23,8 @@ jobs:
     steps:
       - uses: 'actions/checkout@v3'
 
-      - name: 'Grab Tag'
-        run: echo "TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-
-      - name: 'Create Release'
+      - name: 'Publish Release'
         uses: 'azurystudio/log@v1'
-
-      - name: 'Commit Changelog'
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git pull origin dev
-          git add -A
-          git commit -am "package: publish ${{ env.TAG }}"
-          git push origin HEAD:dev
 ```
 
 ### Action Inputs
@@ -46,10 +34,15 @@ jobs:
 | `draft` | Create the release as a draft. | `false` |
 | `prerelease` | Create the release as a prerelease. | `false` |
 | `style` | Set the style of the changelog. This is a combination of the following options separated by a comma and space, e.g. `author, description`: `description`, `author` | |
+| `commit_message` | Set a custom commit message. If your message contains `{tag}`, it'll be automatically replaced with the tag name of the release. | `package: publish {tag}` |
 | `token` | `GITHUB_TOKEN` (permissions `contents: write` and `pull-requests: read`) or a `repo` scoped [Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token). | `GITHUB_TOKEN` |
 
 ### Action Outputs
 
-- `release_id`
-- `tag_name`
-- `created_at`
+| Name | Description | Example |
+| --- | --- | --- |
+| `release_id` | Create the release as a draft. | `1` |
+| `tag_name` | Create the release as a draft. | `v1.0.0` |
+| `created_at` | Create the release as a draft. | `2023-06-10T16:29:08.625Z` |
+| `release_body` | Create the release as a draft. | |
+| `changelog_body` | Create the release as a draft. | |

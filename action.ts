@@ -1,12 +1,17 @@
 import { getBooleanInput, getInput, setFailed, setOutput } from '@actions/core'
 import { context, getOctokit } from '@actions/github'
-import { readFile, writeFile } from 'fs/promises'
+import { readFile } from 'fs/promises'
 
-async function readChangelog() {
+async function fetchChangelog(rest: any) {
   try {
-    return await readFile('changelog.md', { encoding: 'utf-8' })
+    const { data } = await rest.repos.getContent({
+      ...context.repo,
+      path: 'changelog.md'
+    })
+
+    return [data.sha, await readFile('changelog.md', { encoding: 'utf-8' })]
   } catch (err) {
-    return ''
+    return [null, '']
   }
 }
 
@@ -84,7 +89,7 @@ async function action() {
       releaseBody += `(${url})`
     }
 
-    if (style.includes('description')) {
+    if (style.includes('description') && body !== null && body.length > 0) {
       changelogBody += `\n\n  ${body}`
       releaseBody += `\n\n  ${body}`
     }
@@ -101,13 +106,21 @@ async function action() {
     target_commitish: context.sha
   })
 
-  , content = await readChangelog()
+  , [sha, content] = await fetchChangelog(rest)
 
-  await writeFile('changelog.md', `${changelogBody}${content === '' ? '\n' : `\n\n${content}`}`)
+  await rest.repos.createOrUpdateFileContents({
+    ...context.repo,
+    path: 'changelog.md',
+    content: `${changelogBody}${content === '' ? '\n' : `\n\n${content}`}`,
+    message: getInput('commit_message').replace('{tag}', tag),
+    sha
+  })
 
   setOutput('release_id', release.id)
-  setOutput('tag_name', release.tag_name)
+  setOutput('tag_name', tag)
   setOutput('created_at', release.created_at)
+  setOutput('release_body', releaseBody)
+  setOutput('changelog_body', changelogBody)
 }
 
 try {
