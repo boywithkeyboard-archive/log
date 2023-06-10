@@ -10,14 +10,26 @@ async function readChangelog() {
   }
 }
 
+async function getLatestRelease(rest: any) {
+  try {
+    const data = await rest.repos.getLatestRelease({
+      ...context.repo
+    })
+  
+    return data
+  } catch (err) {
+    return {
+      status: 404
+    }
+  }
+}
+
 async function action() {
   const { rest } = getOctokit(process.env.GITHUB_TOKEN as string)
 
   , tag = context.ref.replace('refs/tags/', '')
 
-  , { data: latestRelease, status } = await rest.repos.getLatestRelease({
-    ...context.repo
-  })
+  , { data: latestRelease, status } = await getLatestRelease(rest)
 
   let { data } = await rest.pulls.list({
     ...context.repo,

@@ -7772,10 +7772,20 @@ async function readChangelog() {
     return "";
   }
 }
+async function getLatestRelease(rest) {
+  try {
+    const data = await rest.repos.getLatestRelease({
+      ...import_github.context.repo
+    });
+    return data;
+  } catch (err) {
+    return {
+      status: 404
+    };
+  }
+}
 async function action() {
-  const { rest } = (0, import_github.getOctokit)(process.env.GITHUB_TOKEN), tag = import_github.context.ref.replace("refs/tags/", ""), { data: latestRelease, status } = await rest.repos.getLatestRelease({
-    ...import_github.context.repo
-  });
+  const { rest } = (0, import_github.getOctokit)(process.env.GITHUB_TOKEN), tag = import_github.context.ref.replace("refs/tags/", ""), { data: latestRelease, status } = await getLatestRelease(rest);
   let { data } = await rest.pulls.list({
     ...import_github.context.repo,
     per_page: 100,
