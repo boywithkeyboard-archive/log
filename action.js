@@ -2092,7 +2092,7 @@ var require_core = __commonJS({
       return inputs.map((input) => input.trim());
     }
     exports.getMultilineInput = getMultilineInput;
-    function getBooleanInput(name, options) {
+    function getBooleanInput2(name, options) {
       const trueValue = ["true", "True", "TRUE"];
       const falseValue = ["false", "False", "FALSE"];
       const val = getInput(name, options);
@@ -2103,8 +2103,8 @@ var require_core = __commonJS({
       throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}
 Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
-    exports.getBooleanInput = getBooleanInput;
-    function setOutput(name, value) {
+    exports.getBooleanInput = getBooleanInput2;
+    function setOutput2(name, value) {
       const filePath = process.env["GITHUB_OUTPUT"] || "";
       if (filePath) {
         return file_command_1.issueFileCommand("OUTPUT", file_command_1.prepareKeyValueMessage(name, value));
@@ -2112,16 +2112,16 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       process.stdout.write(os.EOL);
       command_1.issueCommand("set-output", { name }, utils_1.toCommandValue(value));
     }
-    exports.setOutput = setOutput;
+    exports.setOutput = setOutput2;
     function setCommandEcho(enabled) {
       command_1.issue("echo", enabled ? "on" : "off");
     }
     exports.setCommandEcho = setCommandEcho;
-    function setFailed(message) {
+    function setFailed2(message) {
       process.exitCode = ExitCode.Failure;
       error(message);
     }
-    exports.setFailed = setFailed;
+    exports.setFailed = setFailed2;
     function isDebug() {
       return process.env["RUNNER_DEBUG"] === "1";
     }
@@ -7822,19 +7822,19 @@ async function action() {
     tag_name: tag,
     name: tag,
     body: releaseBody,
-    draft: import_core.default.getBooleanInput("draft") ?? false,
-    prerelease: tag.includes("canary") || tag.includes("nightly") || tag.includes("rc") || import_core.default.getBooleanInput("prerelease"),
+    draft: (0, import_core.getBooleanInput)("draft") ?? false,
+    prerelease: tag.includes("canary") || tag.includes("nightly") || tag.includes("rc") || (0, import_core.getBooleanInput)("prerelease"),
     target_commitish: import_github.context.sha
   }), content = await readChangelog();
   await (0, import_promises.writeFile)("changelog.md", `${changelogBody}${content === "" ? "\n" : `
 
 ${content}`}`);
-  import_core.default.setOutput("release_id", release.id);
-  import_core.default.setOutput("tag_name", release.tag_name);
-  import_core.default.setOutput("created_at", release.created_at);
+  (0, import_core.setOutput)("release_id", release.id);
+  (0, import_core.setOutput)("tag_name", release.tag_name);
+  (0, import_core.setOutput)("created_at", release.created_at);
 }
 try {
   action();
 } catch (err) {
-  import_core.default.setFailed(err instanceof Error ? err.message : "Something unexpected happened.");
+  (0, import_core.setFailed)(err instanceof Error ? err.message : "Something unexpected happened.");
 }

@@ -1,4 +1,4 @@
-import core from '@actions/core'
+import { getBooleanInput, setFailed, setOutput } from '@actions/core'
 import { context, getOctokit } from '@actions/github'
 import { readFile, writeFile } from 'fs/promises'
 
@@ -79,8 +79,8 @@ async function action() {
     tag_name: tag,
     name: tag,
     body: releaseBody,
-    draft: core.getBooleanInput('draft') ?? false,
-    prerelease: tag.includes('canary') || tag.includes('nightly') || tag.includes('rc') || core.getBooleanInput('prerelease'),
+    draft: getBooleanInput('draft') ?? false,
+    prerelease: tag.includes('canary') || tag.includes('nightly') || tag.includes('rc') || getBooleanInput('prerelease'),
     target_commitish: context.sha
   })
 
@@ -88,13 +88,13 @@ async function action() {
 
   await writeFile('changelog.md', `${changelogBody}${content === '' ? '\n' : `\n\n${content}`}`)
 
-  core.setOutput('release_id', release.id)
-  core.setOutput('tag_name', release.tag_name)
-  core.setOutput('created_at', release.created_at)
+  setOutput('release_id', release.id)
+  setOutput('tag_name', release.tag_name)
+  setOutput('created_at', release.created_at)
 }
 
 try {
   action()
 } catch (err) {
-  core.setFailed(err instanceof Error ? err.message : 'Something unexpected happened.')
+  setFailed(err instanceof Error ? err.message : 'Something unexpected happened.')
 }
