@@ -16,6 +16,9 @@ outputs:
     description: 'The tag name of the release.'
   created_at:
     description: 'The creation date of the release.'
+branding:
+  icon: 'arrow-up'
+  color: 'blue'
 runs:
   using: 'node16'
   main: 'action.js'
