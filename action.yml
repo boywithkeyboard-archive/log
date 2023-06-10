@@ -5,6 +5,10 @@ inputs:
     description: 'Set the style of the changelog.'
     required: false
     default: ''
+  commit_message:
+    description: 'Set a custom commit message.'
+    required: false
+    default: 'package: publish {tag}'
   prerelease:
     description: 'Create the release as a prerelease.'
     required: false

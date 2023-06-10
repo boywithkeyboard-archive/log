@@ -1668,7 +1668,7 @@ var require_summary = __commonJS({
     exports.summary = exports.markdownSummary = exports.SUMMARY_DOCS_URL = exports.SUMMARY_ENV_VAR = void 0;
     var os_1 = require("os");
     var fs_1 = require("fs");
-    var { access, appendFile, writeFile: writeFile2 } = fs_1.promises;
+    var { access, appendFile, writeFile } = fs_1.promises;
     exports.SUMMARY_ENV_VAR = "GITHUB_STEP_SUMMARY";
     exports.SUMMARY_DOCS_URL = "https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary";
     var Summary = class {
@@ -1726,7 +1726,7 @@ var require_summary = __commonJS({
         return __awaiter(this, void 0, void 0, function* () {
           const overwrite = !!(options === null || options === void 0 ? void 0 : options.overwrite);
           const filePath = yield this.filePath();
-          const writeFunc = overwrite ? writeFile2 : appendFile;
+          const writeFunc = overwrite ? writeFile : appendFile;
           yield writeFunc(filePath, this._buffer, { encoding: "utf8" });
           return this.emptyBuffer();
         });
@@ -7765,11 +7765,15 @@ var require_github = __commonJS({
 var import_core = __toESM(require_core());
 var import_github = __toESM(require_github());
 var import_promises = require("fs/promises");
-async function readChangelog() {
+async function fetchChangelog(rest) {
   try {
-    return await (0, import_promises.readFile)("changelog.md", { encoding: "utf-8" });
+    const { data } = await rest.repos.getContent({
+      ...import_github.context.repo,
+      path: "changelog.md"
+    });
+    return [data.sha, await (0, import_promises.readFile)("changelog.md", { encoding: "utf-8" })];
   } catch (err) {
-    return "";
+    return [null, ""];
   }
 }
 async function getLatestRelease(rest) {
@@ -7823,7 +7827,7 @@ async function action() {
       changelogBody += `([#${number}](${url}))`;
       releaseBody += `(${url})`;
     }
-    if (style.includes("description")) {
+    if (style.includes("description") && body !== null && body.length > 0) {
       changelogBody += `
 
   ${body}`;
@@ -7841,13 +7845,21 @@ async function action() {
     draft: (0, import_core.getBooleanInput)("draft") ?? false,
     prerelease: tag.includes("canary") || tag.includes("nightly") || tag.includes("rc") || (0, import_core.getBooleanInput)("prerelease"),
     target_commitish: import_github.context.sha
-  }), content = await readChangelog();
-  await (0, import_promises.writeFile)("changelog.md", `${changelogBody}${content === "" ? "\n" : `
+  }), [sha, content] = await fetchChangelog(rest);
+  await rest.repos.createOrUpdateFileContents({
+    ...import_github.context.repo,
+    path: "changelog.md",
+    content: `${changelogBody}${content === "" ? "\n" : `
 
-${content}`}`);
+${content}`}`,
+    message: (0, import_core.getInput)("commit_message").replace("{tag}", tag),
+    sha
+  });
   (0, import_core.setOutput)("release_id", release.id);
-  (0, import_core.setOutput)("tag_name", release.tag_name);
+  (0, import_core.setOutput)("tag_name", tag);
   (0, import_core.setOutput)("created_at", release.created_at);
+  (0, import_core.setOutput)("release_body", releaseBody);
+  (0, import_core.setOutput)("changelog_body", changelogBody);
 }
 try {
   action();
