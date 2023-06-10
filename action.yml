@@ -1,4 +1,4 @@
-name: 'log'
+name: 'Log Changes'
 description: '🪵 A smart way of managing changes.'
 inputs:
   prerelease:
