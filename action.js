@@ -7817,16 +7817,18 @@ async function action() {
     releaseBody += `
 * ${title} `;
     if (style.includes("author")) {
-      changelogBody += `([#${number}](${url})${user?.login ? ` by [@${user?.login}](https://github.com/${user?.login})` : ""})`;
-      releaseBody += `(${url}${user?.login ? ` by @${user?.login}` : ""})`;
+      changelogBody += `([#${number}](${url}))${user?.login ? ` by [@${user?.login}](https://github.com/${user?.login})` : ""}`;
+      releaseBody += `(${url})${user?.login ? ` by @${user?.login}` : ""}`;
     } else {
       changelogBody += `([#${number}](${url}))`;
       releaseBody += `(${url})`;
     }
     if (style.includes("description")) {
       changelogBody += `
+
   ${body}`;
       releaseBody += `
+
   ${body}`;
     }
   }

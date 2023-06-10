@@ -71,13 +71,13 @@ async function action() {
     releaseBody += `\n* ${title} `
 
     if (style.includes('author')) {
-      changelogBody += `([#${number}](${url})${
+      changelogBody += `([#${number}](${url}))${
         user?.login ? ` by [@${user?.login}](https://github.com/${user?.login})` : ''
-      })`
+      }`
   
-      releaseBody += `(${url}${
+      releaseBody += `(${url})${
         user?.login ? ` by @${user?.login}` : ''
-      })`
+      }`
     } else {
       changelogBody += `([#${number}](${url}))`
   
@@ -85,8 +85,8 @@ async function action() {
     }
 
     if (style.includes('description')) {
-      changelogBody += `\n  ${body}`
-      releaseBody += `\n  ${body}`
+      changelogBody += `\n\n  ${body}`
+      releaseBody += `\n\n  ${body}`
     }
   }
 
