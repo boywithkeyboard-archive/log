@@ -1,6 +1,10 @@
 name: 'Log Changes'
 description: '🪵 A smart way of managing changes.'
 inputs:
+  style:
+    description: 'Set the style of the changelog.'
+    required: false
+    default: 'author'
   prerelease:
     description: 'Create the release as a prerelease.'
     required: false
@@ -9,6 +13,10 @@ inputs:
     description: 'Create the release as a draft.'
     required: false
     default: 'false'
+  token:
+    description: 'GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT).'
+    required: false
+    default: ${{ github.token }}
 outputs:
   release_id:
     description: 'The id of the release.'
