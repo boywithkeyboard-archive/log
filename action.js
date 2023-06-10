@@ -7785,7 +7785,7 @@ async function getLatestRelease(rest) {
   }
 }
 async function action() {
-  const { rest } = (0, import_github.getOctokit)(process.env.GITHUB_TOKEN), tag = import_github.context.ref.replace("refs/tags/", ""), { data: latestRelease, status } = await getLatestRelease(rest);
+  const { rest } = (0, import_github.getOctokit)(process.env.token), tag = import_github.context.ref.replace("refs/tags/", ""), { data: latestRelease, status } = await getLatestRelease(rest);
   let { data } = await rest.pulls.list({
     ...import_github.context.repo,
     per_page: 100,

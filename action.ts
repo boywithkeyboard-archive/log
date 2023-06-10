@@ -25,7 +25,7 @@ async function getLatestRelease(rest: any) {
 }
 
 async function action() {
-  const { rest } = getOctokit(process.env.GITHUB_TOKEN as string)
+  const { rest } = getOctokit(process.env.token as string)
 
   , tag = context.ref.replace('refs/tags/', '')
 
