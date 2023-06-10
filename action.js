@@ -7805,7 +7805,7 @@ async function action() {
   let changelogBody = `## [${tag}](https://github.com/${import_github.context.repo.owner}/${import_github.context.repo.repo}/releases/tag/${tag})
 `, releaseBody = `### ${tag} / ${year}.${month < 10 ? `0${month}` : month}.${day < 10 ? `0${day}` : day}
 `;
-  const style = (0, import_core.getInput)("style").split(" ");
+  const style = (0, import_core.getInput)("style").split(",");
   for (const { user, title, number, merged_at, body } of data) {
     if (merged_at === null)
       continue;

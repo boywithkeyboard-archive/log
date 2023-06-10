@@ -45,7 +45,7 @@ jobs:
 | --- | --- | --- |
 | `draft` | Create the release as a draft. | `false` |
 | `prerelease` | Create the release as a prerelease. | `false` |
-| `style` | Set the style of the changelog. This is a combination of the following options separated by a space: `description`, `author` | `author` |
+| `style` | Set the style of the changelog. This is a combination of the following options separated by a comma (`,`): `description`, `author` | `author` |
 | `token` | `GITHUB_TOKEN` (permissions `contents: write` and `pull-requests: read`) or a `repo` scoped [Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token). | `GITHUB_TOKEN` |
 
 ### Action Outputs
