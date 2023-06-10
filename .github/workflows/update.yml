@@ -16,7 +16,7 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
       - name: 'Create Release'
-        uses: 'azurystudio/log@v1'
+        uses: 'azurystudio/log@dev'
       
       - name: 'Bump Major Version'
         run: |
