@@ -7810,6 +7810,15 @@ async function action() {
 `, releaseBody = `### ${tag} / ${year}.${month < 10 ? `0${month}` : month}.${day < 10 ? `0${day}` : day}
 `;
   const style = (0, import_core.getInput)("style").split(", ");
+  data.sort((a, b) => {
+    const x = a.title.toLowerCase();
+    const y = b.title.toLowerCase();
+    if (x < y)
+      return -1;
+    if (x > y)
+      return 1;
+    return 0;
+  });
   for (const { user, title, number, merged_at, body } of data) {
     if (merged_at === null)
       continue;
