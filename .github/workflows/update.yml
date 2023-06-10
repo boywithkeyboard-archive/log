@@ -1,0 +1,23 @@
+name: 'update'
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  update:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: 'Git Checkout'
+        uses: 'actions/checkout@v3'
+
+      - name: 'Grab Version'
+        run: echo "VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      
+      - name: 'Bump Major Version'
+        run: |
+          short="${VERSION:0:2}"
+          git tag $short -f
+          git push --tags -f
