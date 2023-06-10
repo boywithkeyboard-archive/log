@@ -1,5 +1,7 @@
 ## log
 
+If you use log, you should have a `changelog.md` file (if you don`t, it will be generated). All your changes should be made through pull requests. log collects the titles of the last merged pull requests and creates a changelog and a release when you push a new tag to the origin.
+
 `.github/workflows/update.yml`
 
 ```yml
