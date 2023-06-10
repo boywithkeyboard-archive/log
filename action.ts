@@ -1,4 +1,4 @@
-import { getBooleanInput, setFailed, setOutput } from '@actions/core'
+import { getBooleanInput, getInput, setFailed, setOutput } from '@actions/core'
 import { context, getOctokit } from '@actions/github'
 import { readFile, writeFile } from 'fs/promises'
 
@@ -25,7 +25,7 @@ async function getLatestRelease(rest: any) {
 }
 
 async function action() {
-  const { rest } = getOctokit(process.env.token as string)
+  const { rest } = getOctokit(getInput('token'))
 
   , tag = context.ref.replace('refs/tags/', '')
 
@@ -55,7 +55,9 @@ async function action() {
   let changelogBody = `## [${tag}](https://github.com/${context.repo.owner}/${context.repo.repo}/releases/tag/${tag})\n`
   , releaseBody = `### ${tag} / ${year}.${month < 10 ? `0${month}` : month}.${day < 10 ? `0${day}` : day}\n`
 
-  for (const { user, title, number, merged_at } of data) {
+  const style = getInput('style').split(' ')
+
+  for (const { user, title, number, merged_at, body } of data) {
     if (merged_at === null)
       continue
 
@@ -64,13 +66,28 @@ async function action() {
 
     const url = `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${number}`
 
-    changelogBody += `\n* ${title} ([#${number}](${url})${
-      user?.login ? ` by [@${user?.login}](https://github.com/${user?.login})` : ''
-    })`
+    changelogBody += `\n* ${title} `
 
-    releaseBody += `\n* ${title} (${url}${
-      user?.login ? ` by @${user?.login}` : ''
-    })`
+    releaseBody += `\n* ${title} `
+
+    if (style.includes('author')) {
+      changelogBody += `([#${number}](${url})${
+        user?.login ? ` by [@${user?.login}](https://github.com/${user?.login})` : ''
+      })`
+  
+      releaseBody += `(${url}${
+        user?.login ? ` by @${user?.login}` : ''
+      })`
+    } else {
+      changelogBody += `([#${number}](${url}))`
+  
+      releaseBody += `(${url})`
+    }
+
+    if (style.includes('description')) {
+      changelogBody += `\n  ${body}`
+      releaseBody += `\n  ${body}`
+    }
   }
 
   const { data: release } = await rest.repos.createRelease({

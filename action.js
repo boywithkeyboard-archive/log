@@ -2073,7 +2073,7 @@ var require_core = __commonJS({
       process.env["PATH"] = `${inputPath}${path.delimiter}${process.env["PATH"]}`;
     }
     exports.addPath = addPath;
-    function getInput(name, options) {
+    function getInput2(name, options) {
       const val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
       if (options && options.required && !val) {
         throw new Error(`Input required and not supplied: ${name}`);
@@ -2083,9 +2083,9 @@ var require_core = __commonJS({
       }
       return val.trim();
     }
-    exports.getInput = getInput;
+    exports.getInput = getInput2;
     function getMultilineInput(name, options) {
-      const inputs = getInput(name, options).split("\n").filter((x) => x !== "");
+      const inputs = getInput2(name, options).split("\n").filter((x) => x !== "");
       if (options && options.trimWhitespace === false) {
         return inputs;
       }
@@ -2095,7 +2095,7 @@ var require_core = __commonJS({
     function getBooleanInput2(name, options) {
       const trueValue = ["true", "True", "TRUE"];
       const falseValue = ["false", "False", "FALSE"];
-      const val = getInput(name, options);
+      const val = getInput2(name, options);
       if (trueValue.includes(val))
         return true;
       if (falseValue.includes(val))
@@ -7785,7 +7785,7 @@ async function getLatestRelease(rest) {
   }
 }
 async function action() {
-  const { rest } = (0, import_github.getOctokit)(process.env.token), tag = import_github.context.ref.replace("refs/tags/", ""), { data: latestRelease, status } = await getLatestRelease(rest);
+  const { rest } = (0, import_github.getOctokit)((0, import_core.getInput)("token")), tag = import_github.context.ref.replace("refs/tags/", ""), { data: latestRelease, status } = await getLatestRelease(rest);
   let { data } = await rest.pulls.list({
     ...import_github.context.repo,
     per_page: 100,
@@ -7805,16 +7805,30 @@ async function action() {
   let changelogBody = `## [${tag}](https://github.com/${import_github.context.repo.owner}/${import_github.context.repo.repo}/releases/tag/${tag})
 `, releaseBody = `### ${tag} / ${year}.${month < 10 ? `0${month}` : month}.${day < 10 ? `0${day}` : day}
 `;
-  for (const { user, title, number, merged_at } of data) {
+  const style = (0, import_core.getInput)("style").split(" ");
+  for (const { user, title, number, merged_at, body } of data) {
     if (merged_at === null)
       continue;
     if (status === 200 && new Date(latestRelease.created_at).getTime() > new Date(merged_at).getTime())
       continue;
     const url = `https://github.com/${import_github.context.repo.owner}/${import_github.context.repo.repo}/pull/${number}`;
     changelogBody += `
-* ${title} ([#${number}](${url})${user?.login ? ` by [@${user?.login}](https://github.com/${user?.login})` : ""})`;
+* ${title} `;
     releaseBody += `
-* ${title} (${url}${user?.login ? ` by @${user?.login}` : ""})`;
+* ${title} `;
+    if (style.includes("author")) {
+      changelogBody += `([#${number}](${url})${user?.login ? ` by [@${user?.login}](https://github.com/${user?.login})` : ""})`;
+      releaseBody += `(${url}${user?.login ? ` by @${user?.login}` : ""})`;
+    } else {
+      changelogBody += `([#${number}](${url}))`;
+      releaseBody += `(${url})`;
+    }
+    if (style.includes("description")) {
+      changelogBody += `
+  ${body}`;
+      releaseBody += `
+  ${body}`;
+    }
   }
   const { data: release } = await rest.repos.createRelease({
     owner: import_github.context.repo.owner,
