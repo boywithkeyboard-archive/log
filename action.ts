@@ -79,6 +79,8 @@ async function action() {
     if (merged_at === null)
       continue
 
+    console.log(latestRelease)
+
     if (status === 200 && new Date(latestRelease.created_at).getTime() > new Date(merged_at).getTime())
       continue
 

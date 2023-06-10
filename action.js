@@ -7822,6 +7822,7 @@ async function action() {
   for (const { user, title, number, merged_at, body } of data) {
     if (merged_at === null)
       continue;
+    console.log(latestRelease);
     if (status === 200 && new Date(latestRelease.created_at).getTime() > new Date(merged_at).getTime())
       continue;
     const url = `https://github.com/${import_github.context.repo.owner}/${import_github.context.repo.repo}/pull/${number}`;
