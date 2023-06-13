@@ -1,3 +1,11 @@
+## [v1.4.3](https://github.com/azurystudio/log/releases/tag/v1.4.3)
+
+* chore(deps-dev): update @types/node requirement from ^20.2.5 to ^20.3.0 ([#8](https://github.com/azurystudio/log/pull/8))
+* chore(deps-dev): update @types/node requirement from ^20.3.0 to ^20.3.1 ([#10](https://github.com/azurystudio/log/pull/10))
+* chore(deps-dev): update esbuild requirement from ^0.18.0 to ^0.18.1 ([#9](https://github.com/azurystudio/log/pull/9))
+* chore(deps-dev): update esbuild requirement from ^0.18.1 to ^0.18.2 ([#11](https://github.com/azurystudio/log/pull/11))
+* fix: indent description ([#12](https://github.com/azurystudio/log/pull/12))
+
 ## [v1.4.2](https://github.com/azurystudio/log/releases/tag/v1.4.2)
 
 * fix: encode file content with base64 ([#6](https://github.com/azurystudio/log/pull/6))
