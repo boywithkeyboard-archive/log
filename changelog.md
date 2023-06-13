@@ -1,3 +1,7 @@
+## [v1.4.4](https://github.com/azurystudio/log/releases/tag/v1.4.4)
+
+* refactor: ignore pull requests by bots ([#13](https://github.com/azurystudio/log/pull/13))
+
 ## [v1.4.3](https://github.com/azurystudio/log/releases/tag/v1.4.3)
 
 * chore(deps-dev): update @types/node requirement from ^20.2.5 to ^20.3.0 ([#8](https://github.com/azurystudio/log/pull/8))
