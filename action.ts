@@ -77,7 +77,7 @@ async function action() {
   })
 
   for (const { user, title, number, merged_at, body } of data) {
-    if (merged_at === null)
+    if (merged_at === null || user?.type === 'Bot')
       continue
 
     if (status === 200 && new Date(latestRelease.created_at).getTime() > new Date(merged_at).getTime())
