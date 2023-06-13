@@ -2,11 +2,12 @@
   "name": "log",
   "private": true,
   "scripts": {
-    "build": "esbuild action.ts --bundle --format=cjs --platform=node --legal-comments=none --outfile=action.js"
+    "build": "esbuild action.ts --bundle --minify --format=cjs --platform=node --legal-comments=none --outfile=action.js"
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
-    "@actions/github": "^5.1.1"
+    "@actions/github": "^5.1.1",
+    "indent-string": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.3.0",

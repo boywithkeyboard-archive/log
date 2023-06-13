@@ -1,6 +1,7 @@
 import { getBooleanInput, getInput, setFailed, setOutput } from '@actions/core'
 import { context, getOctokit } from '@actions/github'
-import { readFile } from 'fs/promises'
+import { readFile } from 'node:fs/promises'
+import indentString from 'indent-string'
 
 async function fetchChangelog(rest: any) {
   try {
@@ -64,7 +65,7 @@ async function action() {
 
   data.sort((a, b) => {
     const x = a.title.toLowerCase()
-    const y = b.title.toLowerCase()
+    , y = b.title.toLowerCase()
 
     if (x < y)
       return -1
@@ -78,8 +79,6 @@ async function action() {
   for (const { user, title, number, merged_at, body } of data) {
     if (merged_at === null)
       continue
-
-    console.log(latestRelease)
 
     if (status === 200 && new Date(latestRelease.created_at).getTime() > new Date(merged_at).getTime())
       continue
@@ -105,8 +104,8 @@ async function action() {
     }
 
     if (style.includes('description') && body !== null && body.length > 0) {
-      changelogBody += `\n\n  ${body}`
-      releaseBody += `\n\n  ${body}`
+      changelogBody += `\n\n${indentString(body, 2)}\n`
+      releaseBody += `\n\n${indentString(body, 2)}\n`
     }
   }
 
