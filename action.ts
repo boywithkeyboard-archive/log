@@ -1,7 +1,7 @@
 import { getBooleanInput, getInput, setFailed, setOutput } from '@actions/core'
 import { context, getOctokit } from '@actions/github'
-import { readFile } from 'node:fs/promises'
 import indentString from 'indent-string'
+import { readFile } from 'node:fs/promises'
 
 async function fetchChangelog(rest: any) {
   try {
@@ -76,31 +76,41 @@ async function action() {
     return 0
   })
 
-  for (const { user, title, number, merged_at, body } of data) {
-    if (merged_at === null || user?.type === 'Bot')
+  for (const { user, number, merged_at, body, merge_commit_sha } of data) {
+    if (merged_at === null || user?.type === 'Bot' || merge_commit_sha === null)
       continue
 
     if (status === 200 && new Date(latestRelease.created_at).getTime() > new Date(merged_at).getTime())
       continue
 
-    const url = `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${number}`
+    const c = await rest.repos.getCommit({
+      ...context.repo,
+      ref: merge_commit_sha
+    })
 
-    changelogBody += `\n* ${title} `
+    if (c.status !== 200)
+      continue
 
-    releaseBody += `\n* ${title} `
+    const i = c.data.commit.message.indexOf(')\n\n') + 1
+    const title = c.data.commit.message.substring(0, i)
+
+    const issueRegex = /(?<!\w)(?:(?<organization>[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?)\/(?<repository>[\w.-]{1,100}))?(?<!(?:\/\.{1,2}))#(?<issueNumber>[1-9]\d{0,9})\b/g
+
+    const matches = title.match(issueRegex)
+
+    if (!matches)
+      throw new Error('Invalid merge commit!')
+    
+    const match = matches[0]
+
+    changelogBody += `\n* ${title.replace(`(${match})`, `([${match}](https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${match.slice(-1)}))`)}`
+
+    releaseBody += `\n* ${title.replace(`(${match})`, `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${match.slice(-1)}`)}`
 
     if (style.includes('author')) {
-      changelogBody += `([#${number}](${url}))${
-        user?.login ? ` by [@${user?.login}](https://github.com/${user?.login})` : ''
-      }`
+      changelogBody += user?.login ? ` by [@${user?.login}](https://github.com/${user?.login})` : ''
   
-      releaseBody += `(${url})${
-        user?.login ? ` by @${user?.login}` : ''
-      }`
-    } else {
-      changelogBody += `([#${number}](${url}))`
-  
-      releaseBody += `(${url})`
+      releaseBody += user?.login ? ` by @${user?.login}` : ''
     }
 
     if (style.includes('description') && body !== null && body.length > 0) {
