@@ -1,3 +1,7 @@
+## [v1.5.1](https://github.com/azurystudio/log/releases/tag/v1.5.1)
+
+* fix: small style inconsistency ([#17](https://github.com/azurystudio/log/pull/7))
+
 ## [v1.5.0](https://github.com/azurystudio/log/releases/tag/v1.5.0)
 
 * refactor: fetch title from merge commit ([#16](https://github.com/azurystudio/log/pull/6))
