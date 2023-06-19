@@ -91,8 +91,8 @@ async function action() {
     if (c.status !== 200)
       continue
 
-    const i = c.data.commit.message.indexOf(')\n\n') + 1
-    const title = c.data.commit.message.substring(0, i)
+    const i = c.data.commit.message.indexOf(')\n\n')
+    const title = c.data.commit.message.substring(0, i > 0 ? i + 1 : undefined)
 
     const issueRegex = /(?<!\w)(?:(?<organization>[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?)\/(?<repository>[\w.-]{1,100}))?(?<!(?:\/\.{1,2}))#(?<issueNumber>[1-9]\d{0,9})\b/g
 
