@@ -12,8 +12,8 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``)}u.g
 `,m=(0,C.getInput)("style").split(", ");r.sort((h,q)=>{let _=h.title.toLowerCase(),O=q.title.toLowerCase();return _<O?-1:_>O?1:0});for(let{user:h,number:q,merged_at:_,body:O,merge_commit_sha:Q}of r){if(_===null||h?.type==="Bot"||Q===null||d===200&&new Date(a.created_at).getTime()>new Date(_).getTime())continue;let Le=await e.repos.getCommit({...P.context.repo,ref:Q});if(Le.status!==200)continue;let re=Le.data.commit.message.indexOf(`)
 
 `),L=Le.data.commit.message.substring(0,re>0?re+1:void 0),ne=/(?<!\w)(?:(?<organization>[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?)\/(?<repository>[\w.-]{1,100}))?(?<!(?:\/\.{1,2}))#(?<issueNumber>[1-9]\d{0,9})\b/g,be=L.match(ne);if(!be)throw new Error(`Invalid merge commit: ${L} (${Q})`);let Be=be[0];i+=`
-* ${L.replace(`(${Be})`,`([${Be}](https://github.com/${P.context.repo.owner}/${P.context.repo.repo}/pull/${Be.slice(-1)}))`)}`,n+=`
-* ${L.replace(`(${Be})`,`(https://github.com/${P.context.repo.owner}/${P.context.repo.repo}/pull/${Be.slice(-1)})`)}`,m.includes("author")&&(i+=h?.login?` by [@${h?.login}](https://github.com/${h?.login})`:"",n+=h?.login?` by @${h?.login}`:""),m.includes("description")&&O!==null&&O.length>0&&(i+=`
+* ${L.replace(`(${Be})`,`([${Be}](https://github.com/${P.context.repo.owner}/${P.context.repo.repo}/pull/${Be.slice(1)}))`)}`,n+=`
+* ${L.replace(`(${Be})`,`(https://github.com/${P.context.repo.owner}/${P.context.repo.repo}/pull/${Be.slice(1)})`)}`,m.includes("author")&&(i+=h?.login?` by [@${h?.login}](https://github.com/${h?.login})`:"",n+=h?.login?` by @${h?.login}`:""),m.includes("description")&&O!==null&&O.length>0&&(i+=`
 
 ${S1(O,2)}
 `,n+=`
