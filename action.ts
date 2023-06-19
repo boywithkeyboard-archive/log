@@ -99,7 +99,7 @@ async function action() {
     const matches = title.match(issueRegex)
 
     if (!matches)
-      throw new Error('Invalid merge commit!')
+      throw new Error(`Invalid merge commit: ${title} (${merge_commit_sha})`)
     
     const match = matches[0]
 
