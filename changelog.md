@@ -1,3 +1,8 @@
+## [v1.5.0](https://github.com/azurystudio/log/releases/tag/v1.5.0)
+
+* refactor: fetch title from merge commit ([#16](https://github.com/azurystudio/log/pull/6))
+* refactor: ignore pull requests by bots ([#13](https://github.com/azurystudio/log/pull/3))
+
 ## [v1.4.4](https://github.com/azurystudio/log/releases/tag/v1.4.4)
 
 * refactor: ignore pull requests by bots ([#13](https://github.com/azurystudio/log/pull/13))
