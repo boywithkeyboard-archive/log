@@ -13,7 +13,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``)}u.g
 
 `),L=Le.data.commit.message.substring(0,re>0?re+1:void 0),ne=/(?<!\w)(?:(?<organization>[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?)\/(?<repository>[\w.-]{1,100}))?(?<!(?:\/\.{1,2}))#(?<issueNumber>[1-9]\d{0,9})\b/g,be=L.match(ne);if(!be)throw new Error(`Invalid merge commit: ${L} (${Q})`);let Be=be[0];i+=`
 * ${L.replace(`(${Be})`,`([${Be}](https://github.com/${P.context.repo.owner}/${P.context.repo.repo}/pull/${Be.slice(-1)}))`)}`,n+=`
-* ${L.replace(`(${Be})`,`https://github.com/${P.context.repo.owner}/${P.context.repo.repo}/pull/${Be.slice(-1)}`)}`,m.includes("author")&&(i+=h?.login?` by [@${h?.login}](https://github.com/${h?.login})`:"",n+=h?.login?` by @${h?.login}`:""),m.includes("description")&&O!==null&&O.length>0&&(i+=`
+* ${L.replace(`(${Be})`,`(https://github.com/${P.context.repo.owner}/${P.context.repo.repo}/pull/${Be.slice(-1)})`)}`,m.includes("author")&&(i+=h?.login?` by [@${h?.login}](https://github.com/${h?.login})`:"",n+=h?.login?` by @${h?.login}`:""),m.includes("description")&&O!==null&&O.length>0&&(i+=`
 
 ${S1(O,2)}
 `,n+=`
