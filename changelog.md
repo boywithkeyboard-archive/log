@@ -1,3 +1,8 @@
+## [v1.5.2](https://github.com/azurystudio/log/releases/tag/v1.5.2)
+
+* fix: reference to pr ([#18](https://github.com/azurystudio/log/pull/18))
+* fix: small style inconsistency ([#17](https://github.com/azurystudio/log/pull/17))
+
 ## [v1.5.1](https://github.com/azurystudio/log/releases/tag/v1.5.1)
 
 * fix: small style inconsistency ([#17](https://github.com/azurystudio/log/pull/7))
