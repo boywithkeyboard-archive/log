@@ -105,7 +105,7 @@ async function action() {
 
     changelogBody += `\n* ${title.replace(`(${match})`, `([${match}](https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${match.slice(-1)}))`)}`
 
-    releaseBody += `\n* ${title.replace(`(${match})`, `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${match.slice(-1)}`)}`
+    releaseBody += `\n* ${title.replace(`(${match})`, `(https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${match.slice(-1)})`)}`
 
     if (style.includes('author')) {
       changelogBody += user?.login ? ` by [@${user?.login}](https://github.com/${user?.login})` : ''
