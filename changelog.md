@@ -1,3 +1,8 @@
+## [v1.6.1](https://github.com/azurystudio/log/releases/tag/v1.6.1)
+
+* feat: ignore reverted changes ([#27](https://github.com/azurystudio/log/pull/27))
+* fix: ignore revert commits ([#28](https://github.com/azurystudio/log/pull/28))
+
 ## [v1.6.0](https://github.com/azurystudio/log/releases/tag/v1.6.0)
 
 * feat: add `?log ignore` command ([#26](https://github.com/azurystudio/log/pull/26))
