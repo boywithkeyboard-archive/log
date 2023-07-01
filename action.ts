@@ -155,8 +155,8 @@ async function action() {
 
     if (
       commits.some((c) =>
-        (c.commit.message.includes('revert') ||
-          c.commit.message.includes('undo')) &&
+        (c.commit.message.startsWith('revert:') ||
+          c.commit.message.startsWith('undo:')) &&
         c.commit.message.includes(`#${number}`)
       )
     ) {
