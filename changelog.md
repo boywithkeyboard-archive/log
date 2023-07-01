@@ -1,3 +1,8 @@
+## [v1.6.0](https://github.com/azurystudio/log/releases/tag/v1.6.0)
+
+* feat: add `?log ignore` command ([#26](https://github.com/azurystudio/log/pull/26))
+* fix: reference to pr ([#18](https://github.com/azurystudio/log/pull/18))
+
 ## [v1.5.2](https://github.com/azurystudio/log/releases/tag/v1.5.2)
 
 * fix: reference to pr ([#18](https://github.com/azurystudio/log/pull/18))
