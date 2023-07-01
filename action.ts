@@ -3,37 +3,46 @@ import { context, getOctokit } from '@actions/github'
 import indentString from 'indent-string'
 import { readFile } from 'node:fs/promises'
 
-async function fetchChangelog(rest: any) {
-  try {
-    const { data } = await rest.repos.getContent({
-      ...context.repo,
-      path: 'changelog.md',
-    })
+async function action() {
+  const { rest } = getOctokit(getInput('token'))
+  const tag = context.ref.replace('refs/tags/', '')
 
-    return [data.sha, await readFile('changelog.md', { encoding: 'utf-8' })]
-  } catch (err) {
-    return [null, '']
-  }
-}
+  const fetchChangelog = async () => {
+    try {
+      const { data } = await rest.repos.getContent({
+        ...context.repo,
+        path: 'changelog.md',
+      })
 
-async function getLatestRelease(rest: any) {
-  try {
-    const data = await rest.repos.getLatestRelease({
-      ...context.repo,
-    })
-
-    return data
-  } catch (err) {
-    return {
-      status: 404,
+      // @ts-ignore:
+      return [data.sha, await readFile('changelog.md', { encoding: 'utf-8' })]
+    } catch (err) {
+      return [null, '']
     }
   }
-}
 
-async function action() {
-  const { rest } = getOctokit(getInput('token')),
-    tag = context.ref.replace('refs/tags/', ''),
-    { data: latestRelease, status } = await getLatestRelease(rest)
+  const getLatestRelease = async () => {
+    try {
+      const data = await rest.repos.getLatestRelease({
+        ...context.repo,
+      })
+
+      return {
+        data: data.data,
+        status: data.status,
+      }
+    } catch (err) {
+      return {
+        status: 404,
+      }
+    }
+  }
+
+  const { data: latestRelease, status } = await getLatestRelease()
+
+  if (!latestRelease) {
+    throw new Error('Failed to fetch latest release.')
+  }
 
   let { data } = await rest.pulls.list({
     ...context.repo,
@@ -82,6 +91,25 @@ async function action() {
     return 0
   })
 
+  const fetchCommits = async (page: number) => {
+    const data = await rest.repos.listCommits({
+      ...context.repo,
+      since: latestRelease.created_at,
+      per_page: 100,
+      page,
+    })
+
+    return data.data
+  }
+
+  const commits = [
+    ...(await fetchCommits(1)),
+    ...(await fetchCommits(2)),
+    ...(await fetchCommits(3)),
+    ...(await fetchCommits(4)),
+    ...(await fetchCommits(5)),
+  ]
+
   for (const { user, merged_at, number, body, merge_commit_sha } of data) {
     if (
       merged_at === null || user?.type === 'Bot' || merge_commit_sha === null
@@ -125,32 +153,27 @@ async function action() {
       continue
     }
 
-    const issueRegex =
-      /(?<!\w)(?:(?<organization>[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?)\/(?<repository>[\w.-]{1,100}))?(?<!(?:\/\.{1,2}))#(?<issueNumber>[1-9]\d{0,9})\b/g
-
-    const matches = title.match(issueRegex)
-
-    if (!matches) {
-      throw new Error(`Invalid merge commit: ${title} (${merge_commit_sha})`)
+    if (
+      commits.some((c) =>
+        (c.commit.message.includes('revert') ||
+          c.commit.message.includes('undo')) &&
+        c.commit.message.includes(`#${number}`)
+      )
+    ) {
+      continue
     }
-
-    const match = matches[0]
 
     changelogBody += `\n* ${
       title.replace(
-        `(${match})`,
-        `([${match}](https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${
-          match.slice(1)
-        }))`,
+        `(#${number})`,
+        `([#${number}](https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${number}))`,
       )
     }`
 
     releaseBody += `\n* ${
       title.replace(
-        `(${match})`,
-        `(https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${
-          match.slice(1)
-        })`,
+        `(#${number})`,
+        `(https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${number})`,
       )
     }`
 
@@ -169,17 +192,18 @@ async function action() {
   }
 
   const { data: release } = await rest.repos.createRelease({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      tag_name: tag,
-      name: tag,
-      body: releaseBody,
-      draft: getBooleanInput('draft') ?? false,
-      prerelease: tag.includes('canary') || tag.includes('nightly') ||
-        tag.includes('rc') || getBooleanInput('prerelease'),
-      target_commitish: context.sha,
-    }),
-    [sha, content] = await fetchChangelog(rest)
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    tag_name: tag,
+    name: tag,
+    body: releaseBody,
+    draft: getBooleanInput('draft') ?? false,
+    prerelease: tag.includes('canary') || tag.includes('nightly') ||
+      tag.includes('rc') || getBooleanInput('prerelease'),
+    target_commitish: context.sha,
+  })
+
+  const [sha, content] = await fetchChangelog()
 
   await rest.repos.createOrUpdateFileContents({
     ...context.repo,
