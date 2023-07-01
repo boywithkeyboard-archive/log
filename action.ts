@@ -116,7 +116,11 @@ async function action() {
 
     if (
       comments.length > 0 &&
-      comments.some((c) => c.body !== undefined && c.body === '?log ignore')
+      comments.some((c) =>
+        c.body !== undefined && c.body === '?log ignore' &&
+        (c.author_association === 'COLLABORATOR' ||
+          c.author_association === 'MEMBER' || c.author_association === 'OWNER')
+      )
     ) {
       continue
     }
