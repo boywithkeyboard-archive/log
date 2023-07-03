@@ -115,6 +115,21 @@ async function action() {
       continue
     }
 
+    const linkifyReferences = (commit: string) => {
+      const issueRegex = /(?<!\w)(?:(?<organization>[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?)\/(?<repository>[\w.-]{1,100}))?(?<!(?:\/\.{1,2}))#(?<issueNumber>[1-9]\d{0,9})\b/g
+    
+      const matches = commit.match(issueRegex)
+    
+      if (!matches)
+        return commit
+    
+      for (const m of matches) {
+        commit = commit.replace(`(${m})`, `([${m}](https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${m.slice(1)}))`)
+      }
+    
+      return commit
+    }
+
     const i = c.data.commit.message.indexOf(')\n\n')
     const title = c.data.commit.message.substring(0, i > 0 ? i + 1 : undefined)
 
@@ -135,17 +150,11 @@ async function action() {
     }
 
     changelogBody += `\n* ${
-      title.replace(
-        `(#${number})`,
-        `([#${number}](https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${number}))`,
-      )
+      linkifyReferences(title)
     }`
 
     releaseBody += `\n* ${
-      title.replace(
-        `(#${number})`,
-        `(https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${number})`,
-      )
+      linkifyReferences(title)
     }`
 
     if (style.includes('author')) {
