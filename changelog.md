@@ -1,3 +1,8 @@
+## [v1.6.4](https://github.com/azurystudio/log/releases/tag/v1.6.4)
+
+* ci: use v1 ([#32](https://github.com/azurystudio/log/pull/32))
+* fix: duplicate revisions ([#31](https://github.com/azurystudio/log/pull/31))
+
 ## [v1.6.3](https://github.com/azurystudio/log/releases/tag/v1.6.3)
 
 * fix: duplicate revisions ([#31](https://github.com/azurystudio/log/pull/31))
