@@ -1,3 +1,9 @@
+## [v1.6.2](https://github.com/azurystudio/log/releases/tag/v1.6.2)
+
+* fix: ignore revert commits ([#28](https://github.com/azurystudio/log/pull/28))
+* fix: linkify all references ([#30](https://github.com/azurystudio/log/pull/30))
+* refactor: do not ignore revert commits ([#29](https://github.com/azurystudio/log/pull/29))
+
 ## [v1.6.1](https://github.com/azurystudio/log/releases/tag/v1.6.1)
 
 * feat: ignore reverted changes ([#27](https://github.com/azurystudio/log/pull/27))
