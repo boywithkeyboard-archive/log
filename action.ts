@@ -90,16 +90,15 @@ async function action() {
 
     return 0
   })
-  
+
   for (const { user, merged_at, number, body, merge_commit_sha } of data) {
     if (
-      merged_at === null || user?.type === 'Bot' || merge_commit_sha === null
+      merged_at === null || user?.type === 'Bot' || merge_commit_sha === null || status !== 200
     ) {
       continue
     }
 
     if (
-      status === 200 &&
       new Date(latestRelease.created_at).getTime() >
         new Date(merged_at).getTime()
     ) {
@@ -116,17 +115,24 @@ async function action() {
     }
 
     const linkifyReferences = (commit: string) => {
-      const issueRegex = /(?<!\w)(?:(?<organization>[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?)\/(?<repository>[\w.-]{1,100}))?(?<!(?:\/\.{1,2}))#(?<issueNumber>[1-9]\d{0,9})\b/g
-    
+      const issueRegex =
+        /(?<!\w)(?:(?<organization>[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?)\/(?<repository>[\w.-]{1,100}))?(?<!(?:\/\.{1,2}))#(?<issueNumber>[1-9]\d{0,9})\b/g
+
       const matches = commit.match(issueRegex)
-    
-      if (!matches)
+
+      if (!matches) {
         return commit
-    
-      for (const m of matches) {
-        commit = commit.replace(`(${m})`, `([${m}](https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${m.slice(1)}))`)
       }
-    
+
+      for (const m of matches) {
+        commit = commit.replace(
+          `(${m})`,
+          `([${m}](https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${
+            m.slice(1)
+          }))`,
+        )
+      }
+
       return commit
     }
 
@@ -149,13 +155,9 @@ async function action() {
       continue
     }
 
-    changelogBody += `\n* ${
-      linkifyReferences(title)
-    }`
+    changelogBody += `\n* ${linkifyReferences(title)}`
 
-    releaseBody += `\n* ${
-      linkifyReferences(title)
-    }`
+    releaseBody += `\n* ${linkifyReferences(title)}`
 
     if (style.includes('author')) {
       changelogBody += user?.login
