@@ -90,26 +90,7 @@ async function action() {
 
     return 0
   })
-
-  const fetchCommits = async (page: number) => {
-    const data = await rest.repos.listCommits({
-      ...context.repo,
-      since: latestRelease.created_at,
-      per_page: 100,
-      page,
-    })
-
-    return data.data
-  }
-
-  const commits = [
-    ...(await fetchCommits(1)),
-    ...(await fetchCommits(2)),
-    ...(await fetchCommits(3)),
-    ...(await fetchCommits(4)),
-    ...(await fetchCommits(5)),
-  ]
-
+  
   for (const { user, merged_at, number, body, merge_commit_sha } of data) {
     if (
       merged_at === null || user?.type === 'Bot' || merge_commit_sha === null
@@ -148,16 +129,6 @@ async function action() {
         c.body !== undefined && c.body === '?log ignore' &&
         (c.author_association === 'COLLABORATOR' ||
           c.author_association === 'MEMBER' || c.author_association === 'OWNER')
-      )
-    ) {
-      continue
-    }
-
-    if (
-      commits.some((c) =>
-        (c.commit.message.startsWith('revert:') ||
-          c.commit.message.startsWith('undo:')) &&
-        c.commit.message.includes(`#${number}`)
       )
     ) {
       continue
