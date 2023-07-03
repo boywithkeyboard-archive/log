@@ -1,3 +1,8 @@
+## [v1.6.3](https://github.com/azurystudio/log/releases/tag/v1.6.3)
+
+* fix: duplicate revisions ([#31](https://github.com/azurystudio/log/pull/31))
+* fix: linkify all references ([#30](https://github.com/azurystudio/log/pull/30))
+
 ## [v1.6.2](https://github.com/azurystudio/log/releases/tag/v1.6.2)
 
 * fix: ignore revert commits ([#28](https://github.com/azurystudio/log/pull/28))
