@@ -23,12 +23,12 @@ async function action() {
 
   const getLatestRelease = async () => {
     try {
-      const data = await rest.repos.getLatestRelease({
+      const data = await rest.repos.listReleases({
         ...context.repo,
       })
 
       return {
-        data: data.data,
+        data: data.data[0],
         status: data.status,
       }
     } catch (err) {
