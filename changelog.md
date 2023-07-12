@@ -1,3 +1,8 @@
+## [v1.6.7](https://github.com/azurystudio/log/releases/tag/v1.6.7)
+
+* chore: log latest release ([#38](https://github.com/azurystudio/log/pull/38))
+* chore: use dev build internally ([#39](https://github.com/azurystudio/log/pull/39))
+
 ## [v1.6.6](https://github.com/azurystudio/log/releases/tag/v1.6.6)
 
 * chore: log latest release ([#38](https://github.com/azurystudio/log/pull/38))
