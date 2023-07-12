@@ -42,7 +42,9 @@ async function action() {
 
   const { data: latestRelease, status } = await getLatestRelease()
 
-  console.info(`Latest release: ${latestRelease?.tag_name} (published at ${latestRelease?.created_at})`)
+  console.info(
+    `Latest release: ${latestRelease?.tag_name} (published at ${latestRelease?.created_at})`,
+  )
 
   if (!latestRelease) {
     throw new Error('Failed to fetch latest release.')
@@ -97,13 +99,14 @@ async function action() {
 
   for (const { user, merged_at, number, body, merge_commit_sha } of data) {
     if (
-      merged_at === null || user?.type === 'Bot' || merge_commit_sha === null || status !== 200
+      merged_at === null || user?.type === 'Bot' || merge_commit_sha === null ||
+      status !== 200
     ) {
       continue
     }
 
     if (
-      new Date(latestRelease.created_at).getTime() >
+      new Date(latestRelease.created_at).getTime() >=
         new Date(merged_at).getTime()
     ) {
       continue
@@ -115,6 +118,14 @@ async function action() {
     })
 
     if (c.status !== 200) {
+      continue
+    }
+
+    if (
+      c.data.commit.committer?.date &&
+      new Date(c.data.commit.committer?.date).getTime() <=
+        new Date(latestRelease.created_at).getTime()
+    ) {
       continue
     }
 
