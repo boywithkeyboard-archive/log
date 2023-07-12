@@ -1,3 +1,8 @@
+## [v1.6.5](https://github.com/azurystudio/log/releases/tag/v1.6.5)
+
+* ci: use v1 ([#32](https://github.com/azurystudio/log/pull/32))
+* fix: get most recent release, not latest ([#37](https://github.com/azurystudio/log/pull/37))
+
 ## [v1.6.4](https://github.com/azurystudio/log/releases/tag/v1.6.4)
 
 * ci: use v1 ([#32](https://github.com/azurystudio/log/pull/32))
