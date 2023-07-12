@@ -1,3 +1,7 @@
+## [v1.6.8](https://github.com/azurystudio/log/releases/tag/v1.6.8)
+
+* fix: only include new commits ([#40](https://github.com/azurystudio/log/pull/40))
+
 ## [v1.6.7](https://github.com/azurystudio/log/releases/tag/v1.6.7)
 
 * chore: log latest release ([#38](https://github.com/azurystudio/log/pull/38))
