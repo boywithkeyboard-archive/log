@@ -1,3 +1,7 @@
+## [v1.6.9](https://github.com/azurystudio/log/releases/tag/v1.6.9)
+
+* refactor: do not minify action ([#41](https://github.com/azurystudio/log/pull/41))
+
 ## [v1.6.8](https://github.com/azurystudio/log/releases/tag/v1.6.8)
 
 * fix: only include new commits ([#40](https://github.com/azurystudio/log/pull/40))
