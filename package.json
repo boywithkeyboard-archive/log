@@ -2,7 +2,7 @@
   "name": "log",
   "private": true,
   "scripts": {
-    "build": "esbuild action.ts --bundle --minify --format=cjs --platform=node --legal-comments=none --outfile=action.js"
+    "build": "esbuild action.ts --bundle --minify --format=cjs --platform=node --legal-comments=none --outfile=action.js && deno fmt action.ts --no-semicolons --single-quote"
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
