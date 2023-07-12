@@ -27,6 +27,8 @@ async function action() {
         ...context.repo,
       })
 
+      data.data[0].tag_name
+
       return {
         data: data.data[0],
         status: data.status,
@@ -39,6 +41,8 @@ async function action() {
   }
 
   const { data: latestRelease, status } = await getLatestRelease()
+
+  console.info(`Latest release: ${latestRelease?.tag_name} (published at ${latestRelease?.created_at})`)
 
   if (!latestRelease) {
     throw new Error('Failed to fetch latest release.')
